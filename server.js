@@ -31,4 +31,11 @@ io.on('connection', socket => {
     })
 })
 
+function myFunc(arg) {
+    io.sockets.emit('change color', 'red')
+    setTimeout(myFunc, 1000, 'funky');
+}
+
+myFunc();
+
 server.listen(port, () => console.log(`Listening on port ${port}`))
