@@ -2,7 +2,7 @@
 var Promise = require('bluebird');
 var sleep = require('sleep').sleep;
 // var Client = require("owfs").Client; // real client !! DO NOT REMOVE!!
-var Client = require('../../models/fake_owfs').Client;
+var Client = require('../models/fake_owfs').Client;
 
 var dirall = Promise.promisify(
     Client.prototype.dirall
@@ -30,19 +30,32 @@ var read = function (device) {
         readFullPath(device + '/' + 'sensed.ALL'),
         readFullPath(device + '/' + 'sensed.A'),
         readFullPath(device + '/' + 'sensed.B'),
+        readFullPath(device + '/' + 'data'), // @todo change to actual name
     ]).then(function (data) {
         return new Promise(function (resolve, reject) {
-            resolve(
-                {
-                    device: device,
-                    'PIO.ALL': data[0],
-                    'PIO.A': data[1],
-                    'PIO.B': data[2],
-                    'sensed.ALL': data[3],
-                    'sensed.A': data[4],
-                    'sensed.B': data[5],
-                }
-            );
+            if (typeof data[0] == 'undefined') {
+                // thermo
+                resolve(
+                    {
+                        device: device,
+                        data: data[6],
+                    }
+                );
+            }
+            else {
+                // switcher
+                resolve(
+                    {
+                        device: device,
+                        'PIO.ALL': data[0],
+                        'PIO.A': data[1],
+                        'PIO.B': data[2],
+                        'sensed.ALL': data[3],
+                        'sensed.A': data[4],
+                        'sensed.B': data[5],
+                    }
+                );
+            }
         })
     })
 };
@@ -97,10 +110,10 @@ var getAllDevicesData = function (blacklist) {
 
 var groundAll = function () {
     return new Promise(function (resolve, reject) {
-        getAllDevicesData().then(function(devices){
-            devices.forEach(function(device){
-                client.write(device.device + '/PIO.A', 0, function(){
-                    client.write(device.device + '/PIO.B', 0, function(){
+        getAllDevicesData().then(function (devices) {
+            devices.forEach(function (device) {
+                client.write(device.device + '/PIO.A', 0, function () {
+                    client.write(device.device + '/PIO.B', 0, function () {
                         resolve();
                     });
                 });

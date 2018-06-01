@@ -1,6 +1,13 @@
+DEBUG = require('debug')('app')
+DEBUG_OWFS= require('debug')('owfs')
+DEBUG_MYSQL = require('debug')('mysql')
+DEBUG_CLIENT = require('debug')('client')
+
 const express = require('express')
 const http = require('http')
 const socketIO = require('socket.io')
+const device = require('./models/device')
+
 
 // our localhost port
 const port = 4001
@@ -17,6 +24,12 @@ const io = socketIO(server)
 io.on('connection', socket => {
     console.log('New client connected')
 
+    device.getRaw(function(err, devices){
+        DEBUG("init", devices)
+        io.sockets.emit('devices init', devices);
+    })
+
+
     // just like on the client side, we have a socket.on method that takes a callback function
     socket.on('change color', (color) => {
         // once we get a 'change color' event from one of our clients, we will send it to the rest of the clients
@@ -32,8 +45,8 @@ io.on('connection', socket => {
 })
 
 function myFunc(arg) {
-    io.sockets.emit('change color', 'red')
-    setTimeout(myFunc, 1000, 'funky');
+    // io.sockets.emit('change color', 'red')
+    // setTimeout(myFunc, 1000, 'funky');
 }
 
 myFunc();
