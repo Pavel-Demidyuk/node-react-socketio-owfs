@@ -1,6 +1,6 @@
 // var model = require('../../models/db/db');
 var Promise = require('bluebird');
-var sleep = require('sleep').sleep;
+// var sleep = require('sleep').sleep;
 // var Client = require("owfs").Client; // real client !! DO NOT REMOVE!!
 var Client = require('../models/fake_owfs').Client;
 
