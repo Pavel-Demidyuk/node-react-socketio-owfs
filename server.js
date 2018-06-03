@@ -44,6 +44,6 @@ function refresh() {
     updateDevices();
     setTimeout(refresh, 400);
 }
-//refresh();
+refresh();
 
 server.listen(port, () => console.log(`Listening on port ${port}`))

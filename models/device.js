@@ -24,10 +24,6 @@ var checkFormat = function (device) {
 }
 
 var read = function (device) {
-
-    DEBUG("READ", device)
-
-
     device = checkFormat(device);
 
     return Promise.all([
@@ -138,6 +134,8 @@ var groundAll = function () {
 var device = {
     getRaw: function (callback) {
         getAllDevicesData().then(function (data) {
+            DEBUG("data", data)
+
             Promise.all(devicesConfig.map(function (device) {
                 switch (device.type) {
                     case 'switcher' : {
