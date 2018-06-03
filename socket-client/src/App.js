@@ -11,7 +11,6 @@ class App extends Component {
         super();
         const socket = socketIOClient(this.state.endpoint);
         socket.on('devices init', (devices) => {
-            // console.log("DEVICE_INIT", devices);
             this.setState({
                 devices: devices
             })
@@ -19,7 +18,18 @@ class App extends Component {
     }
 
     switch = (name, state) => {
-        console.log(name, state);
+        var result = this.state.devices.map((device) => {
+            if (device.name === name) {
+                device.sensor = state
+            }
+            return device;
+        })
+
+        this.setState({
+            devices: result
+        })
+
+
         socketIOClient(this.state.endpoint).emit(
             'switch', name, state)
     }
@@ -30,24 +40,17 @@ class App extends Component {
         }
 
         var devicesList = this.state.devices.map((device) => {
-
-            console.log(device)
-
             if (device.type === 'switcher') {
                 var result =
                     <div key={device.random} className='element'>
-                        <label className="mdl-switch mdl-js-switch mdl-js-ripple-effect" htmlFor={device.name}>
-                            <input type="checkbox" id={device.name}
-                                   className="mdl-switch__input"
-                                   defaultChecked={device.sensor === 1}
-                                   onClick={() => this.switch(device.name, 1 - device.sensor)}
-                            >
-                            </input>
-                            <span className="mdl-switch__label">{device.name} {device.sensor}</span>
-                        </label>
+                        {device.name} {device.sensor} <input className="tgl tgl-ios" id={device.name} type="checkbox"
+                               defaultChecked={device.sensor === 1}
+                               onClick={() => this.switch(device.name, 1 - device.sensor)}
+                        />
+                        <label className="tgl-btn" htmlFor={device.name}></label>
+                        <br/>
                     </div>
                 return result
-
             }
 
             return <li key={device.name}>{device.name} - {device.data}</li>
