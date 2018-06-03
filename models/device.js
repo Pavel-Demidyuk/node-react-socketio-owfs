@@ -9,8 +9,8 @@ var dirall = Promise.promisify(
 );
 
 // @todo replace hardcode
-// var client = new Client('127.0.0.1', '4304');
-var client = new Client();
+var client = new Client('127.0.0.1', '4304');
+// var client = new Client();
 var concurrency = 10; // number of concurrent reads
 
 
