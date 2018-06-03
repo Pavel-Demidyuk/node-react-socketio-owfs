@@ -1,6 +1,3 @@
-var Promise = require('bluebird');
-
-
 var Client = function (host, port) {
     DEBUG('Fake OWFS client initiated:', host, port);
 
@@ -54,7 +51,7 @@ var Client = function (host, port) {
     ]
 }
 
-Client.prototype.dirall = function (path, callback, test) {
+Client.prototype.dirall = function (path, callback) {
     var result = []
 
     for (var i in this.values) {
