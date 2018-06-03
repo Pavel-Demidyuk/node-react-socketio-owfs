@@ -31,7 +31,7 @@ var read = function (device) {
         readFullPath(device + '/' + 'sensed.ALL'),
         readFullPath(device + '/' + 'sensed.A'),
         readFullPath(device + '/' + 'sensed.B'),
-        readFullPath(device + '/' + 'data'), // @todo change to actual name
+        readFullPath(device + '/' + 'temperature'), // @todo change to actual name
     ]).then(function (data) {
         return new Promise(function (resolve, reject) {
             if (typeof data[0] == 'undefined') {

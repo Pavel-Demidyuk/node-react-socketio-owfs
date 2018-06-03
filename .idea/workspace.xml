@@ -3,7 +3,6 @@
   <component name="ChangeListManager">
     <list default="true" id="83b2f996-573e-482b-89dc-19882735cc6b" name="Default" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change beforePath="$PROJECT_DIR$/devices_real.js" afterPath="$PROJECT_DIR$/devices_real.js" />
       <change beforePath="$PROJECT_DIR$/models/device.js" afterPath="$PROJECT_DIR$/models/device.js" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -70,8 +69,8 @@
       <file leaf-file-name="device.js" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/models/device.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="60">
-              <caret line="4" column="19" lean-forward="false" selection-start-line="4" selection-start-column="19" selection-end-line="4" selection-end-column="19" />
+            <state relative-caret-position="191">
+              <caret line="33" column="48" lean-forward="false" selection-start-line="33" selection-start-column="48" selection-end-line="33" selection-end-column="48" />
               <folding />
             </state>
           </provider>
@@ -314,7 +313,7 @@
       <workItem from="1528049331583" duration="2488000" />
       <workItem from="1528053597723" duration="1771000" />
       <workItem from="1528055420386" duration="638000" />
-      <workItem from="1528059370186" duration="397000" />
+      <workItem from="1528059370186" duration="456000" />
     </task>
     <task id="LOCAL-00001" summary="socket io init">
       <created>1527844675377</created>
@@ -428,11 +427,18 @@
       <option name="project" value="LOCAL" />
       <updated>1528055644905</updated>
     </task>
-    <option name="localTasksCounter" value="17" />
+    <task id="LOCAL-00017" summary="real devices">
+      <created>1528059946823</created>
+      <option name="number" value="00017" />
+      <option name="presentableId" value="LOCAL-00017" />
+      <option name="project" value="LOCAL" />
+      <updated>1528059946824</updated>
+    </task>
+    <option name="localTasksCounter" value="18" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="26042000" />
+    <option name="totallyTimeSpent" value="26101000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="71" y="52" width="1166" height="697" extended-state="0" />
@@ -848,8 +854,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/models/device.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="60">
-          <caret line="4" column="19" lean-forward="false" selection-start-line="4" selection-start-column="19" selection-end-line="4" selection-end-column="19" />
+        <state relative-caret-position="191">
+          <caret line="33" column="48" lean-forward="false" selection-start-line="33" selection-start-column="48" selection-end-line="33" selection-end-column="48" />
           <folding />
         </state>
       </provider>
