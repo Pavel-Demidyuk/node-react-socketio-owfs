@@ -3,7 +3,6 @@
   <component name="ChangeListManager">
     <list default="true" id="83b2f996-573e-482b-89dc-19882735cc6b" name="Default" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change beforePath="$PROJECT_DIR$/models/device.js" afterPath="$PROJECT_DIR$/models/device.js" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -301,7 +300,7 @@
       <workItem from="1528043661506" duration="894000" />
       <workItem from="1528047518997" duration="1070000" />
       <workItem from="1528049331583" duration="2488000" />
-      <workItem from="1528053597723" duration="1307000" />
+      <workItem from="1528053597723" duration="1319000" />
     </task>
     <task id="LOCAL-00001" summary="socket io init">
       <created>1527844675377</created>
@@ -387,11 +386,18 @@
       <option name="project" value="LOCAL" />
       <updated>1528054800509</updated>
     </task>
-    <option name="localTasksCounter" value="13" />
+    <task id="LOCAL-00013" summary="debug">
+      <created>1528054919773</created>
+      <option name="number" value="00013" />
+      <option name="presentableId" value="LOCAL-00013" />
+      <option name="project" value="LOCAL" />
+      <updated>1528054919773</updated>
+    </task>
+    <option name="localTasksCounter" value="14" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="24543000" />
+    <option name="totallyTimeSpent" value="24555000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="93" y="30" width="1166" height="697" extended-state="0" />
