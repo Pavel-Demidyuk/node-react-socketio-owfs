@@ -134,17 +134,13 @@ var groundAll = function () {
 var device = {
     getRaw: function (callback) {
         getAllDevicesData().then(function (data) {
-
-            callback(data);
-            return;
-
             Promise.all(devicesConfig.map(function (device) {
                 switch (device.type) {
                     case 'switcher' : {
-                        return Promise.all([
-                            readFullPath(device.switcher_path),
-                            readFullPath(device.sensor_path)
-                        ])
+                        // return Promise.all([
+                        //     readFullPath(device.switcher_path),
+                        //     readFullPath(device.sensor_path)
+                        // ])
                     }
                     case 'thermo' : {
                         return readFullPath(device.path)
