@@ -137,9 +137,6 @@ var device = {
             Promise.all(devicesConfig.map(function (device) {
                 switch (device.type) {
                     case 'switcher' : {
-
-                        DEBUG(">>>>>>>>>", device.switcher_path, device.sensor_path)
-
                         return Promise.all([
                             readFullPath(device.switcher_path),
                             readFullPath(device.sensor_path)
