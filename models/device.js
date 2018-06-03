@@ -24,6 +24,10 @@ var checkFormat = function (device) {
 }
 
 var read = function (device) {
+
+    DEBUG("READ", device)
+
+
     device = checkFormat(device);
 
     return Promise.all([
