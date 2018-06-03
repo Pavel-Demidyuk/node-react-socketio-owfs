@@ -3,7 +3,7 @@ import socketIOClient from "socket.io-client";
 
 class App extends Component {
     state = {
-        endpoint: "http://127.0.0.1:4001",
+        endpoint: "http://192.168.1.2:4001",
         devices: [],
     }
 
