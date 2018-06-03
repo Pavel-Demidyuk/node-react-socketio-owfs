@@ -1,8 +1,8 @@
-// var model = require('../../models/db/db');
 var Promise = require('bluebird');
-// var sleep = require('sleep').sleep;
-// var Client = require("owfs").Client; // real client !! DO NOT REMOVE!!
-var Client = require('../models/fake_owfs').Client;
+var Client = require("owfs").Client; // real client !! DO NOT REMOVE!!
+var devicesConfig = require('../devices_real.js');
+
+// var Client = require('../models/fake_owfs').Client;
 
 var dirall = Promise.promisify(
     Client.prototype.dirall
@@ -12,8 +12,6 @@ var dirall = Promise.promisify(
 // var client = new Client('127.0.0.1', '4304');
 var client = new Client();
 var concurrency = 10; // number of concurrent reads
-
-var devicesConfig = require('../devices.js');
 
 
 var checkFormat = function (device) {

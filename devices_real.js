@@ -2,28 +2,23 @@
 
 var devices = [
     {
-        name: 'switcher_1',
+        name: 'первый рубильник',
         type: 'switcher',
         switcher_path: '/3A.B7C507000000/PIO.A',
         sensor_path: '/3A.B7C507000000/PIO.B'
     },
 
     {
-        name: 'switcher_2',
+        name: 'второй рубильник',
         type: 'switcher',
         switcher_path: '/3A.9FC307000000/PIO.A',
         sensor_path: '/3A.9FC307000000/PIO.A'
     },
     {
-        name: 'thermo_1',
+        name: 'термометр',
         type: 'thermo',
-        path: '/path_to_termo_1/data',
-    },
-    {
-        name: 'thermo_2',
-        type: 'thermo',
-        path: '/path_to_termo_2/data',
-    },
+        path: '/28.FF6754610400/temperature',
+    }
 ]
 
 
