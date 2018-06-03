@@ -1,5 +1,5 @@
 DEBUG = require('debug')('app')
-DEBUG_OWFS= require('debug')('owfs')
+DEBUG_OWFS = require('debug')('owfs')
 DEBUG_MYSQL = require('debug')('mysql')
 DEBUG_CLIENT = require('debug')('client')
 
@@ -17,25 +17,21 @@ const app = express()
 // our server instance
 const server = http.createServer(app)
 
-// This creates our socket using the instance of the server
 const io = socketIO(server)
 
-// This is what the socket.io syntax is like, we will work this later
-io.on('connection', socket => {
-    console.log('New client connected')
-
-    device.getRaw(function(err, devices){
-        DEBUG("init", devices)
+updateDevices = () => {
+    device.getRaw(function (err, devices) {
         io.sockets.emit('devices init', devices);
     })
+}
 
+io.on('connection', socket => {
+    console.log('New client connected')
+    updateDevices();
+    socket.on('switch', (name, state) => {
+        device.switch(name, state, function () {
 
-    // just like on the client side, we have a socket.on method that takes a callback function
-    socket.on('change color', (color) => {
-        // once we get a 'change color' event from one of our clients, we will send it to the rest of the clients
-        // we make use of the socket.emit method again with the argument given to use from the callback function above
-        console.log('Color Changed to: ', color)
-        io.sockets.emit('change color', color)
+        })
     })
 
     // disconnect is fired when a client leaves the server
@@ -44,11 +40,10 @@ io.on('connection', socket => {
     })
 })
 
-function myFunc(arg) {
-    // io.sockets.emit('change color', 'red')
-    // setTimeout(myFunc, 1000, 'funky');
+function refresh() {
+    updateDevices();
+    setTimeout(refresh, 1000);
 }
-
-myFunc();
+refresh();
 
 server.listen(port, () => console.log(`Listening on port ${port}`))

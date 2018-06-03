@@ -2,25 +2,25 @@
 
 var devices = [
     {
-        name: 'switcher 1',
+        name: 'switcher_1',
         type: 'switcher',
         switcher_path: '/3A.999248336241/PIO.A',
         sensor_path: '/3A.D8FE434D9855/PIO.B'
     },
 
     {
-        name: 'switcher 2',
+        name: 'switcher_2',
         type: 'switcher',
         switcher_path: '/3A.98542F112D05/PIO.A',
         sensor_path: '/3A.D8FE434D9855/PIO.A'
     },
     {
-        name: 'thermo 1',
+        name: 'thermo_1',
         type: 'thermo',
         path: '/path_to_termo_1/data',
     },
     {
-        name: 'thermo 2',
+        name: 'thermo_2',
         type: 'thermo',
         path: '/path_to_termo_2/data',
     },

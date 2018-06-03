@@ -12,6 +12,8 @@ var dirall = Promise.promisify(
 var client = new Client('127.0.0.1', '4304');
 var concurrency = 10; // number of concurrent reads
 
+var devicesConfig = require('../devices.js');
+
 
 var checkFormat = function (device) {
     if (device.charAt(0) !== '/') {
@@ -98,6 +100,9 @@ var toggle = function (fullPath) {
     })
 }
 
+getRandomInt = () => Math.floor(Math.random() * Math.floor(1000000));
+
+
 var getAllDevicesData = function (blacklist) {
     return dirall.call(client, '/').then(function (entries) {
         return Promise.filter(entries, function (entry) {
@@ -123,62 +128,53 @@ var groundAll = function () {
 }
 
 var device = {
-    findPair: function (fullPath) {
-        var self = this;
-        fullPath = checkFormat(fullPath);
+    getRaw: function (callback) {
+        getAllDevicesData().then(function (data) {
+            Promise.all(devicesConfig.map(function (device) {
+                switch (device.type) {
+                    case 'switcher' : {
+                        return Promise.all([
+                            readFullPath(device.switcher_path),
+                            readFullPath(device.sensor_path)
+                        ])
+                    }
+                    case 'thermo' : {
+                        return readFullPath(device.path)
+                    }
+                }
+            })).then(function (data) {
 
-        var deviceName = checkFormat(fullPath.split('/')[1]);
+                var result = [];
 
-        return new Promise(function (resolve, reject) {
-            var pair = {}
-            self.getRaw(function (err, startValues) {
-                toggle(fullPath).then(function () {
-                    getAllDevicesData().then(function (endValues) {
-                        endValues.forEach(function (endValue) {
-                            var testedDeviceName = endValue.device;
-                            if (testedDeviceName == deviceName) {
-                                // we shouldn't test device itself
-                                return;
-                            }
-                            else {
-                                try {
-                                    startValues.forEach(function (startValue) {
-                                        if (startValue.device == testedDeviceName) {
-                                            if (startValue['sensed.A'] !== endValue['sensed.A']) {
-                                                pair = {
-                                                    'switcher': fullPath,
-                                                    'sensor': startValue.device + '/PIO.A'
-                                                }
-                                                throw 'ok';
-                                            }
-                                            if (startValue['sensed.B'] !== endValue['sensed.B']) {
-                                                pair = {
-                                                    'switcher': fullPath,
-                                                    'sensor': startValue.device + '/PIO.B'
-                                                }
-                                                throw 'ok';
-                                            }
-                                        }
-                                    })
-                                }
-                                catch (e) {
-                                    DEBUG(e);
-                                }
-                            }
+                for (var i in devicesConfig) {
+
+                    if (Array.isArray(data[i])) {
+                        result.push({
+                            name: devicesConfig[i].name,
+                            type: 'switcher',
+                            sensor: Number(data[i][1]),
+                            random: getRandomInt()
                         })
+                    }
 
-                    }).then(function () {
-                        sleep(1);
-                        groundAll().then(resolve(pair));
-                    })
-                })
+                    else {
+                        result.push({
+                            name: devicesConfig[i].name,
+                            type: 'thermo',
+                            data: Number(data[i])
+                        })
+                    }
+                }
+                callback(false, result)
             })
         })
     },
 
-    getRaw: function (callback) {
-        getAllDevicesData().then(function (data) {
-            callback(false, data)
+    switch: function (deviceName, state, callback) {
+        devicesConfig.forEach(function (deviceConfig) {
+            if (deviceConfig.name == deviceName) {
+                write(deviceConfig.switcher_path, state, callback)
+            }
         })
     },
 
