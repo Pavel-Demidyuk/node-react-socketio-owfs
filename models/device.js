@@ -133,6 +133,9 @@ var groundAll = function () {
 
 var device = {
     getRaw: function (callback) {
+        callback([]);
+        return;
+
         getAllDevicesData().then(function (data) {
             DEBUG("data", data)
 
