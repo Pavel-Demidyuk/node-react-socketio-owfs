@@ -141,9 +141,11 @@ var device = {
                         //     readFullPath(device.switcher_path),
                         //     readFullPath(device.sensor_path)
                         // ])
+                        break;
                     }
                     case 'thermo' : {
                         return readFullPath(device.path)
+                        break;
                     }
                 }
             })).then(function (data) {
