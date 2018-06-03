@@ -133,11 +133,10 @@ var groundAll = function () {
 
 var device = {
     getRaw: function (callback) {
-        callback([]);
-        return;
-
         getAllDevicesData().then(function (data) {
-            DEBUG("data", data)
+
+            callback(data);
+            return;
 
             Promise.all(devicesConfig.map(function (device) {
                 switch (device.type) {
