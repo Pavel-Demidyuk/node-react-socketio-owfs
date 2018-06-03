@@ -106,9 +106,6 @@ getRandomInt = () => Math.floor(Math.random() * Math.floor(1000000));
 
 var getAllDevicesData = function (blacklist) {
     return dirall.call(client, '/').then(function (entries) {
-
-        DEBUG(entries)
-
         return Promise.filter(entries, function (entry) {
             return !blacklist || !entry.match(blacklist);
         }).then(function (entries) {
