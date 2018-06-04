@@ -42,7 +42,7 @@ io.on('connection', socket => {
 
 function refresh() {
     updateDevices();
-    setTimeout(refresh, 400);
+    setTimeout(refresh, 1000);
 }
 refresh();
 
