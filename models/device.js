@@ -21,43 +21,46 @@ var checkFormat = function (device) {
     return device;
 }
 
-var read = function (device) {
-    devicePath = checkFormat(device.path);
-    return Promise.all([
-        readFullPath(devicePath + '/' + 'PIO.ALL'),
-        readFullPath(devicePath + '/' + 'PIO.A'),
-        readFullPath(devicePath + '/' + 'PIO.B'),
-        readFullPath(devicePath + '/' + 'sensed.ALL'),
-        readFullPath(devicePath + '/' + 'sensed.A'),
-        readFullPath(devicePath + '/' + 'sensed.B')
-    ]).then(function (data) {
-        return new Promise(function (resolve, reject) {
-            if (typeof data[0] == 'undefined') {
-                // thermo
-                resolve(
-                    {
-                        device: devicePath,
-                        data: data[6],
-                    }
-                );
-            }
-            else {
-                // switcher
-                resolve(
-                    {
-                        device: devicePath,
-                        'PIO.ALL': data[0],
-                        'PIO.A': data[1],
-                        'PIO.B': data[2],
-                        'sensed.ALL': data[3],
-                        'sensed.A': data[4],
-                        'sensed.B': data[5],
-                    }
-                );
-            }
-        })
-    })
-};
+
+
+//
+// var read = function (device) {
+//     devicePath = checkFormat(device.path);
+//     return Promise.all([
+//         readFullPath(devicePath + '/' + 'PIO.ALL'),
+//         readFullPath(devicePath + '/' + 'PIO.A'),
+//         readFullPath(devicePath + '/' + 'PIO.B'),
+//         readFullPath(devicePath + '/' + 'sensed.ALL'),
+//         readFullPath(devicePath + '/' + 'sensed.A'),
+//         readFullPath(devicePath + '/' + 'sensed.B')
+//     ]).then(function (data) {
+//         return new Promise(function (resolve, reject) {
+//             if (typeof data[0] == 'undefined') {
+//                 // thermo
+//                 resolve(
+//                     {
+//                         device: devicePath,
+//                         data: data[6],
+//                     }
+//                 );
+//             }
+//             else {
+//                 // switcher
+//                 resolve(
+//                     {
+//                         device: devicePath,
+//                         'PIO.ALL': data[0],
+//                         'PIO.A': data[1],
+//                         'PIO.B': data[2],
+//                         'sensed.ALL': data[3],
+//                         'sensed.A': data[4],
+//                         'sensed.B': data[5],
+//                     }
+//                 );
+//             }
+//         })
+//     })
+// };
 
 var readFullPath = function (fullPath) {
     fullPath = checkFormat(fullPath);
