@@ -21,6 +21,10 @@ var checkFormat = function (device) {
     return device;
 }
 
+function getRandomInt() {
+    return Math.floor(Math.random() * Math.floor(10000000));
+}
+
 //
 // var read = function (device) {
 //     devicePath = checkFormat(device.path);
@@ -123,7 +127,8 @@ var device = {
                     result.push({
                         name: devicesConfig[i].name,
                         type: 'switcher',
-                        sensor: Number(data[i][1])
+                        sensor: Number(data[i][1]),
+                        random: getRandomInt()
                     })
                 }
                 else {
