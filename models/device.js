@@ -86,24 +86,10 @@ var write = function (fullPath, value) {
     });
 };
 
-var toggle = function (fullPath) {
-    fullPath = checkFormat(fullPath);
-    return new Promise(function (resolve, reject) {
-        readFullPath(fullPath).then(function (value) {
-            write(fullPath, 1 - value).then(function () {
-                read(fullPath.split("/")[1]).then(function (data) {
-                    resolve(data);
-                })
-            })
-        })
-    })
-}
-
-getRandomInt = () => Math.floor(Math.random() * Math.floor(1000000));
-
-
 var getAllDevicesData = function (blacklist) {
     return dirall.call(client, '/').then(function (entries) {
+        DEBUG_OWFS("OWFS", entries)
+
         return Promise.filter(entries, function (entry) {
             return !blacklist || !entry.match(blacklist);
         }).then(function (entries) {
@@ -153,8 +139,7 @@ var device = {
                         result.push({
                             name: devicesConfig[i].name,
                             type: 'switcher',
-                            sensor: Number(data[i][1]),
-                            random: getRandomInt()
+                            sensor: Number(data[i][1])
                         })
                     }
 
