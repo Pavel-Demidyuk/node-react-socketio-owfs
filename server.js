@@ -30,7 +30,7 @@ io.on('connection', socket => {
     updateDevices();
     socket.on('switch', (name, state) => {
         device.switch(name, state, function () {
-
+            updateDevices();
         })
     })
 
