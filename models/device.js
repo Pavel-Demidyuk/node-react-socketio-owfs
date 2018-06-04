@@ -85,7 +85,7 @@ var write = function (fullPath, value) {
             if (err)
                 reject(err);
             else
-                resolve(read(fullPath.split("/")[1]));
+                resolve(false, null);
         });
     });
 };
