@@ -42,7 +42,7 @@ class App extends Component {
         var devicesList = this.state.devices.map((device) => {
             if (device.type === 'switcher') {
                 var result =
-                    <div key={device.random} className='element'>
+                    <div key={device.name} className='element'>
                         {device.name} {device.sensor} <input className="tgl tgl-ios" id={device.name} type="checkbox"
                                defaultChecked={device.sensor === 1}
                                onClick={() => this.switch(device.name, 1 - device.sensor)}
