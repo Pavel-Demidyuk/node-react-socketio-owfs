@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="83b2f996-573e-482b-89dc-19882735cc6b" name="Default" comment="">
+    <list default="true" id="83b2f996-573e-482b-89dc-19882735cc6b" name="Default" comment="real devices">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change beforePath="$PROJECT_DIR$/models/device.js" afterPath="$PROJECT_DIR$/models/device.js" />
       <change beforePath="$PROJECT_DIR$/npm-debug.log" afterPath="" />
@@ -317,7 +317,7 @@
       <workItem from="1528053597723" duration="1771000" />
       <workItem from="1528055420386" duration="638000" />
       <workItem from="1528059370186" duration="852000" />
-      <workItem from="1528107395913" duration="452000" />
+      <workItem from="1528107395913" duration="439000" />
     </task>
     <task id="LOCAL-00001" summary="socket io init">
       <created>1527844675377</created>
@@ -449,7 +449,7 @@
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="26949000" />
+    <option name="totallyTimeSpent" value="26936000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="71" y="52" width="1166" height="697" extended-state="0" />
@@ -488,9 +488,9 @@
     <MESSAGE value="socket io init" />
     <MESSAGE value="updates..." />
     <MESSAGE value="remove sleep" />
-    <MESSAGE value="real devices" />
     <MESSAGE value="debug" />
-    <option name="LAST_COMMIT_MESSAGE" value="debug" />
+    <MESSAGE value="real devices" />
+    <option name="LAST_COMMIT_MESSAGE" value="real devices" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager />

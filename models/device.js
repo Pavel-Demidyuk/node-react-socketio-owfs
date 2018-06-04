@@ -23,7 +23,6 @@ var checkFormat = function (device) {
 
 var read = function (device) {
     device = checkFormat(device);
-
     return Promise.all([
         readFullPath(device + '/' + 'PIO.ALL'),
         readFullPath(device + '/' + 'PIO.A'),
@@ -64,8 +63,12 @@ var read = function (device) {
 var readFullPath = function (fullPath) {
     fullPath = checkFormat(fullPath);
 
+
     return new Promise(function (resolve, reject) {
         client.read(fullPath, function (err, data) {
+            DEBUG_OWFS("FULL PATH", fullPath);
+            DEBUG_OWFS("OWFS ERROR", err)
+
             if (err)
                 reject(err)
             resolve(data);
@@ -88,8 +91,6 @@ var write = function (fullPath, value) {
 
 var getAllDevicesData = function (blacklist) {
     return dirall.call(client, '/').then(function (entries) {
-        DEBUG_OWFS("OWFS", entries)
-
         return Promise.filter(entries, function (entry) {
             return !blacklist || !entry.match(blacklist);
         }).then(function (entries) {
