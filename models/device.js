@@ -22,22 +22,21 @@ var checkFormat = function (device) {
 }
 
 var read = function (device) {
-    device = checkFormat(device);
+    devicePath = checkFormat(device.path);
     return Promise.all([
-        readFullPath(device + '/' + 'PIO.ALL'),
-        readFullPath(device + '/' + 'PIO.A'),
-        readFullPath(device + '/' + 'PIO.B'),
-        readFullPath(device + '/' + 'sensed.ALL'),
-        readFullPath(device + '/' + 'sensed.A'),
-        readFullPath(device + '/' + 'sensed.B'),
-        readFullPath(device + '/' + 'temperature'), // @todo change to actual name
+        readFullPath(devicePath + '/' + 'PIO.ALL'),
+        readFullPath(devicePath + '/' + 'PIO.A'),
+        readFullPath(devicePath + '/' + 'PIO.B'),
+        readFullPath(devicePath + '/' + 'sensed.ALL'),
+        readFullPath(devicePath + '/' + 'sensed.A'),
+        readFullPath(devicePath + '/' + 'sensed.B')
     ]).then(function (data) {
         return new Promise(function (resolve, reject) {
             if (typeof data[0] == 'undefined') {
                 // thermo
                 resolve(
                     {
-                        device: device,
+                        device: devicePath,
                         data: data[6],
                     }
                 );
@@ -46,7 +45,7 @@ var read = function (device) {
                 // switcher
                 resolve(
                     {
-                        device: device,
+                        device: devicePath,
                         'PIO.ALL': data[0],
                         'PIO.A': data[1],
                         'PIO.B': data[2],
@@ -99,61 +98,41 @@ var getAllDevicesData = function (blacklist) {
     });
 }
 
-var groundAll = function () {
-    return new Promise(function (resolve, reject) {
-        getAllDevicesData().then(function (devices) {
-            devices.forEach(function (device) {
-                client.write(device.device + '/PIO.A', 0, function () {
-                    client.write(device.device + '/PIO.B', 0, function () {
-                        resolve();
-                    });
-                });
-            })
-        })
-    })
-}
-
 var device = {
     getRaw: function (callback) {
-        getAllDevicesData().then(function (data) {
-            Promise.all(devicesConfig.map(function (device) {
-                switch (device.type) {
-                    case 'switcher' : {
-                        return Promise.all([
-                            readFullPath(device.switcher_path),
-                            readFullPath(device.sensor_path)
-                        ])
-                        break;
-                    }
-                    case 'thermo' : {
-                        return readFullPath(device.path)
-                        break;
-                    }
+        Promise.all(devicesConfig.map(function (device) {
+            switch (device.type) {
+                case 'switcher' : {
+                    return Promise.all([
+                        readFullPath(device.switcher_path),
+                        readFullPath(device.sensor_path)
+                    ])
+                    break;
                 }
-            })).then(function (data) {
-
-                var result = [];
-
-                for (var i in devicesConfig) {
-
-                    if (Array.isArray(data[i])) {
-                        result.push({
-                            name: devicesConfig[i].name,
-                            type: 'switcher',
-                            sensor: Number(data[i][1])
-                        })
-                    }
-
-                    else {
-                        result.push({
-                            name: devicesConfig[i].name,
-                            type: 'thermo',
-                            data: Number(data[i])
-                        })
-                    }
+                case 'thermo' : {
+                    return readFullPath(device.path)
+                    break;
                 }
-                callback(false, result)
-            })
+            }
+        })).then(function (data) {
+            var result = [];
+            for (var i in devicesConfig) {
+                if (Array.isArray(data[i])) {
+                    result.push({
+                        name: devicesConfig[i].name,
+                        type: 'switcher',
+                        sensor: Number(data[i][1])
+                    })
+                }
+                else {
+                    result.push({
+                        name: devicesConfig[i].name,
+                        type: 'thermo',
+                        data: Number(data[i])
+                    })
+                }
+            }
+            callback(false, result)
         })
     },
 
