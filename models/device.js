@@ -21,8 +21,6 @@ var checkFormat = function (device) {
     return device;
 }
 
-
-
 //
 // var read = function (device) {
 //     devicePath = checkFormat(device.path);
@@ -68,11 +66,12 @@ var readFullPath = function (fullPath) {
 
     return new Promise(function (resolve, reject) {
         client.read(fullPath, function (err, data) {
-            DEBUG_OWFS("FULL PATH", fullPath);
-            DEBUG_OWFS("OWFS ERROR", err)
+            // DEBUG_OWFS("FULL PATH", fullPath);
+            // DEBUG_OWFS("OWFS ERROR", err)
 
             if (err)
-                reject(err)
+                DEBUG_OWFS (err);
+                // reject(err)
             resolve(data);
         })
     })
