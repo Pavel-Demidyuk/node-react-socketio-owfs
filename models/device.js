@@ -150,9 +150,10 @@ var device = {
         }
 
         write(device, data).then(function () {
-            read(device).then(function (data) {
-                callback(false, data)
-            })
+            callback(false, null)
+            // read(device).then(function (data) {
+            //     callback(false, data)
+            // })
         })
     }
 }
