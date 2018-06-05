@@ -2,8 +2,18 @@ var Promise = require('bluebird');
 
 var devicesConfig = require('../devices_real.js');
 
-var Client = require("owfs").Client;
-// var Client = require('../models/fake_owfs').Client;
+switch(process.env.NODE_ENV){
+    case 'dev':
+        var Client = require('../models/fake_owfs').Client;
+        break;
+
+    case 'prod':
+        var Client = require("owfs").Client;
+        break;
+
+    default:
+        var Client = require("owfs").Client;
+}
 
 var dirall = Promise.promisify(
     Client.prototype.dirall
