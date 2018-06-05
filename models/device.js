@@ -2,8 +2,8 @@ var Promise = require('bluebird');
 
 var devicesConfig = require('../devices_real.js');
 
-// var Client = require("owfs").Client; // real client !! DO NOT REMOVE!!
-var Client = require('../models/fake_owfs').Client;
+var Client = require("owfs").Client; // real client !! DO NOT REMOVE!!
+// var Client = require('../models/fake_owfs').Client;
 
 var dirall = Promise.promisify(
     Client.prototype.dirall
