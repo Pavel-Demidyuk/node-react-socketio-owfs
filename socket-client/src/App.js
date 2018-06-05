@@ -1,26 +1,41 @@
 import React, {Component} from "react";
 import socketIOClient from "socket.io-client";
-
+import {LineChart} from 'react-easy-chart';
 class App extends Component {
     state = {
         endpoint: "http://raspberrypi.local:4001",
         devices: [],
+        tempData: []
     }
 
     constructor() {
         super();
         const socket = socketIOClient(this.state.endpoint);
         socket.on('devices init', (devices) => {
-            console.log(devices)
+            var tempData = this.state.tempData
+            devices.forEach(function (device) {
+                if (device.type === 'thermo') {
+                    var date = new Date();
+                    if (typeof tempData[device.name] === 'undefined') {
+                        tempData[device.name] = []
+                        tempData[device.name][0] = []
+                    }
 
+                    if (tempData[device.name].length > 20) {
+                        console.log("here",tempData);
+                        tempData[device.name].shift();
+                    }
+                    tempData[device.name][0].push({x: date.getMinutes() + ':' + date.getSeconds() + ':' + date.getMilliseconds(), y: device.data})
+                }
+            })
             this.setState({
+                tempData: tempData,
                 devices: devices
             })
         })
     }
 
     switch = (name, state) => {
-
         console.log(name, state);
         var result = this.state.devices.map((device) => {
             if (device.name === name) {
@@ -43,7 +58,6 @@ class App extends Component {
         if (!this.state.devices.length) {
             return "устанавливаем подключение...";
         }
-
         var devicesList = this.state.devices.map((device) => {
             if (device.type === 'switcher') {
                 var style = {
@@ -66,29 +80,24 @@ class App extends Component {
                             <small>{device.sensor}</small>
                         </div>
                     </div>
-                return result
             }
-
-            return <div key={device.name} className="element">
-                <li>{device.name} - {device.data}</li>
-            </div>
+            else {
+                var result =
+                    <div key={device.name} className="element">
+                        <li>{device.name} - {device.data}</li>
+                        <LineChart
+                            xType={'text'}
+                            axes
+                            width={950}
+                            height={250}
+                            data={this.state.tempData[device.name]}
+                        />
+                    </div>
+            }
+            return result;
         })
 
         return (devicesList);
-
-        // return (
-        //     <div style={{margin: '20px'}}>
-        //         {/*<button onClick={() => this.send() }>Change Color</button>*/}
-        //         {/*<button id="blue" onClick={() => this.setColor('blue')}>Blue</button>*/}
-        //         {/*<button id="red" onClick={() => this.setColor('red')}>Red</button>*/}
-        //         <label className="mdl-switch mdl-js-switch mdl-js-ripple-effect" htmlFor="switch-2">
-        //             <input type="checkbox" id="switch-2" className="mdl-switch__input"></input>
-        //             <span className="mdl-switch__label">test 1</span>
-        //         </label>
-        //
-        //         ***{ this.state.color }***
-        //     </div>
-        // )
     }
 }
 
