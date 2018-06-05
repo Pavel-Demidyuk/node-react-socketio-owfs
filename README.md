@@ -1,8 +1,9 @@
 1. Install nodejs
 1. Clone this project
+1. Update configs in /conigs folder (self-explanatory)
 1. From the parent folder run 
     ```bash 
-    node server.js
+    DEBUG=automation,owfs node server.js
     ```
 1. In separate terminal window run
     ```bash
