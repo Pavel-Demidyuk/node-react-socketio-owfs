@@ -3,7 +3,7 @@
 1. Update configs in /conigs folder (self-explanatory)
 1. From the parent folder run 
     ```bash 
-    DEBUG=automation,owfs node server.js
+    DEBUG=automation,owfs NODE_ENV=prod node server.js
     ```
 1. In separate terminal window run
     ```bash
