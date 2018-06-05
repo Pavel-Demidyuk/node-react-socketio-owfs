@@ -71,7 +71,7 @@ var readFullPath = function (fullPath) {
 
     return new Promise(function (resolve, reject) {
         client.read(fullPath, function (err, data) {
-            // DEBUG_OWFS("FULL PATH", fullPath);
+            DEBUG_OWFS("FULL PATH", fullPath, data);
             // DEBUG_OWFS("OWFS ERROR", err)
 
             if (err)
