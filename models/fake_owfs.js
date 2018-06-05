@@ -3,7 +3,7 @@ var Client = function (host, port) {
 
     this.values = [
         {
-            device: '/3A.999248336241',
+            device: '/3A.EEC507000000',
             '/PIO.A': '0',
             '/PIO.B': '0',
             '/PIO.ALL': '0,0',
@@ -12,15 +12,7 @@ var Client = function (host, port) {
             '/sensed.B': '0',
         },
         {
-            device: '/3A.D8FE434D9855',
-            '/PIO.A': '0',
-            '/PIO.B': '0',
-            '/PIO.ALL': '0,0',
-            '/sensed.ALL': '0,0',
-            '/sensed.A': '0',
-            '/sensed.B': '0',
-        }, {
-            device: '/3A.98542F112D05',
+            device: '/3A.EEC507000000',
             '/PIO.A': '0',
             '/PIO.B': '0',
             '/PIO.ALL': '0,0',
@@ -29,24 +21,32 @@ var Client = function (host, port) {
             '/sensed.B': '0',
         },
         {
-            device: '/path_to_termo_1',
-            '/data' : 25
+            device: '/3A.7DC607000000',
+            '/PIO.A': '0',
+            '/PIO.B': '0',
+            '/PIO.ALL': '0,0',
+            '/sensed.ALL': '0,0',
+            '/sensed.A': '0',
+            '/sensed.B': '0',
         },
         {
-            device: '/path_to_termo_2',
-            '/data' : 30
+            device: '/28.FF6754610400',
+            '/temperature': 25
         },
-
+        {
+            device: '/28.C3772D050000',
+            '/temperature': 25
+        }
     ];
 
     this.relations = [
         {
-            switcher: '/3A.999248336241/PIO.A',
-            sensor: '/3A.D8FE434D9855/PIO.B'
+            switcher: '/3A.EEC507000000/PIO.A',
+            sensor: '/3A.7DC607000000/PIO.A'
         },
         {
-            switcher: '/3A.98542F112D05/PIO.A',
-            sensor: '/3A.D8FE434D9855/PIO.A'
+            switcher: '/3A.EEC507000000/PIO.B',
+            sensor: '/3A.7DC607000000/PIO.B'
         },
     ]
 }
@@ -62,9 +62,14 @@ Client.prototype.dirall = function (path, callback) {
 }
 
 Client.prototype.read = function (path, callback) {
-    // DEBUG_OWFS("read", path);
+    DEBUG_OWFS("read", path);
     var deviceName = '/' + path.split('/')[1]
     var path = '/' + path.split('/')[2]
+
+    if (path == '/temperature') {
+        var r =  Math.round(Math.random() * Math.floor(50)*100)/100
+        callback(false, r);
+    }
 
     callback(false, this.findDevice(deviceName)[0][path]);
 

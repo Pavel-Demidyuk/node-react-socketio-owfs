@@ -1,7 +1,8 @@
 var Promise = require('bluebird');
-var Client = require("owfs").Client; // real client !! DO NOT REMOVE!!
+
 var devicesConfig = require('../devices_real.js');
 
+var Client = require("owfs").Client; // real client !! DO NOT REMOVE!!
 // var Client = require('../models/fake_owfs').Client;
 
 var dirall = Promise.promisify(
@@ -146,7 +147,9 @@ var device = {
     switch: function (deviceName, state, callback) {
         devicesConfig.forEach(function (deviceConfig) {
             if (deviceConfig.name == deviceName) {
-                write(deviceConfig.switcher_path, state, callback)
+                write(deviceConfig.switcher_path, state).then(function(err, data){
+                    callback();
+                })
             }
         })
     },
