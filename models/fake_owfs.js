@@ -62,7 +62,7 @@ Client.prototype.dirall = function (path, callback) {
 }
 
 Client.prototype.read = function (path, callback) {
-    DEBUG_OWFS("read", path);
+    // DEBUG_OWFS("read", path);
     var deviceName = '/' + path.split('/')[1]
     var path = '/' + path.split('/')[2]
 
@@ -76,7 +76,7 @@ Client.prototype.read = function (path, callback) {
 }
 
 Client.prototype.write = function (fullPath, value, callback) {
-    DEBUG_OWFS("write", fullPath, value);
+    // DEBUG_OWFS("write", fullPath, value);
 
     var device, index;
     var pio_path = fullPath.split('/')[2];
