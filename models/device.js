@@ -30,7 +30,7 @@ var readFullPath = function (fullPath) {
     fullPath = checkFormat(fullPath);
     return new Promise(function (resolve, reject) {
         client.read(fullPath, function (err, data) {
-            DEBUG_OWFS("FULL PATH", fullPath, data);
+            DEBUG_OWFS("FULL PATH READ", fullPath, data);
             // DEBUG_OWFS("OWFS ERROR", err)
 
             if (err)
@@ -43,7 +43,7 @@ var readFullPath = function (fullPath) {
 
 var write = function (fullPath, value) {
     fullPath = checkFormat(fullPath);
-
+    DEBUG_OWFS("->>>> FULL PATH WRITE", fullPath, value);
     return new Promise(function (resolve, reject) {
         client.write(fullPath, value, function (err) {
             if (err)

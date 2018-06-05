@@ -21,7 +21,9 @@ const io = socketIO(server)
 
 updateDevices = () => {
     device.getRaw(function (err, devices) {
+        DEBUG_OWFS("DEVICES LIST SEND", devices)
         io.sockets.emit('devices init', devices);
+
     })
 }
 
@@ -42,7 +44,7 @@ io.on('connection', socket => {
 
 function refresh() {
     updateDevices();
-    setTimeout(refresh, 4000);
+    setTimeout(refresh, 5000);
 }
 refresh();
 
