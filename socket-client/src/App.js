@@ -12,6 +12,8 @@ class App extends Component {
         super();
         const socket = socketIOClient(this.state.endpoint);
         socket.on('devices init', (devices) => {
+            console.log(devices);
+
             var tempData = this.state.tempData
             devices.forEach(function (device) {
                 if (device.type === 'thermo') {
