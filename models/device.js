@@ -1,8 +1,8 @@
 var Promise = require('bluebird');
 
-var devicesConfig = require('../devices_real.js');
+var devicesConfig = require('../configs/devices');
 
-switch(process.env.NODE_ENV){
+switch (process.env.NODE_ENV) {
     case 'dev':
         var Client = require('../models/fake_owfs').Client;
         break;
@@ -15,14 +15,7 @@ switch(process.env.NODE_ENV){
         var Client = require("owfs").Client;
 }
 
-var dirall = Promise.promisify(
-    Client.prototype.dirall
-);
-
-// @todo replace hardcode
 var client = new Client('localhost', '4304');
-// var client = new Client();
-var concurrency = 10; // number of concurrent reads
 
 
 var checkFormat = function (device) {
@@ -44,8 +37,8 @@ var readFullPath = function (fullPath) {
             // DEBUG_OWFS("OWFS ERROR", err)
 
             if (err)
-                DEBUG_OWFS (err);
-                // reject(err)
+                DEBUG_OWFS(err);
+            // reject(err)
             resolve(data);
         })
     })
@@ -65,24 +58,30 @@ var write = function (fullPath, value) {
 };
 
 var device = {
-    getRaw: function (callback) {
+    getRaw: function (type, callback) {
         Promise.all(devicesConfig.map(function (device) {
-            switch (device.type) {
-                case 'switcher' : {
-                    return Promise.all([
-                        readFullPath(device.switcher_path),
-                        readFullPath(device.sensor_path)
-                    ])
-                    break;
-                }
-                case 'thermo' : {
-                    return readFullPath(device.path)
-                    break;
+            if (device.type === type) {
+                switch (device.type) {
+                    case 'switcher' : {
+                        return Promise.all([
+                            readFullPath(device.switcher_path),
+                            readFullPath(device.sensor_path)
+                        ])
+                        break;
+                    }
+                    case 'thermo' : {
+                        return readFullPath(device.path)
+                        break;
+                    }
                 }
             }
         })).then(function (data) {
             var result = [];
             for (var i in devicesConfig) {
+                if (devicesConfig[i].type != type) {
+                    continue;
+                }
+
                 if (Array.isArray(data[i])) {
                     result.push({
                         name: devicesConfig[i].name,
@@ -106,7 +105,7 @@ var device = {
     switch: function (deviceName, state, callback) {
         devicesConfig.forEach(function (deviceConfig) {
             if (deviceConfig.name == deviceName) {
-                write(deviceConfig.switcher_path, state).then(function(err, data){
+                write(deviceConfig.switcher_path, state).then(function (err, data) {
                     callback();
                 })
             }
@@ -123,6 +122,57 @@ var device = {
             // read(device).then(function (data) {
             //     callback(false, data)
             // })
+        })
+    },
+
+    runRules: function (thermosData) {
+        // app [ { name: 'Рекуператор C°', type: 'thermo', data: 34.46 },
+        //     app   { name: 'Теплый пол C°', type: 'thermo', data: 8.66 } ] +1ms
+
+        var self = this;
+        devicesConfig.forEach(function (device) {
+            if (device.type != 'thermo') {
+                return;
+            }
+            else {
+                thermosData.forEach(function (thermoData) {
+                    if (thermoData.name == device.name
+                        && typeof device.rules != 'undefined'
+                        && device.rules.length > 0
+                    ) {
+                        device.rules.forEach(function (rule) {
+                            for (var condition in rule) {
+                                var fullPath, action,
+                                    symbol = condition.charAt(0),
+                                    temperature = condition.substr(1);
+
+                                [fullPath, action] = rule[condition].split(' ')
+
+                                switch (symbol) {
+                                    case '>' : {
+                                        if (thermoData.data > temperature) {
+                                            DEBUG_AUTOMATION("AUTOMATION: ", fullPath, action);
+                                            self.write(fullPath, action == 'ON' ? 1 : 0, function(){
+                                                // self.runRules(thermosData);
+                                            })
+                                        }
+                                        break;
+                                    }
+                                    case '<' : {
+                                        if (thermoData.data < temperature) {
+                                            DEBUG_AUTOMATION("AUTOMATION: ", fullPath, action);
+                                            self.write(fullPath, action == 'ON' ? 1 : 0, function(){
+                                                // self.runRules(thermosData);
+                                            })
+                                        }
+                                        break;
+                                    }
+                                }
+                            }
+                        })
+                    }
+                })
+            }
         })
     }
 }

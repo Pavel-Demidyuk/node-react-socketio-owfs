@@ -1,51 +1,64 @@
 DEBUG = require('debug')('app')
 DEBUG_OWFS = require('debug')('owfs')
-DEBUG_MYSQL = require('debug')('mysql')
-DEBUG_CLIENT = require('debug')('client')
+DEBUG_AUTOMATION = require('debug')('automation')
 
 const express = require('express')
 const http = require('http')
 const socketIO = require('socket.io')
 const device = require('./models/device')
+const config = require('./configs/config')
 
 
 // our localhost port
-const port = 4001
+const port = config.server_port
 
 const app = express()
 
 // our server instance
 const server = http.createServer(app)
-
 const io = socketIO(server)
 
-updateDevices = () => {
-    device.getRaw(function (err, devices) {
-        DEBUG_OWFS("DEVICES LIST SEND", devices)
-        io.sockets.emit('devices init', devices);
+updateSwitcher = () => {
+    device.getRaw('switcher', function (err, devices) {
+        DEBUG_OWFS("DEVICES LIST TO SEND", devices)
+        io.sockets.emit('switchers_update', devices);
 
+    })
+}
+
+updateThermos = () => {
+    device.getRaw('thermo', function (err, thermos) {
+        device.runRules(thermos, function(){
+            // do nothing so far for async run
+        })
+        io.sockets.emit('thermos_update', thermos);
     })
 }
 
 io.on('connection', socket => {
-    console.log('New client connected')
-    updateDevices();
+    DEBUG('New client connected')
+    updateSwitcher();
     socket.on('switch', (name, state) => {
         device.switch(name, state, function () {
-            updateDevices();
+            updateSwitcher();
         })
     })
-
-    // disconnect is fired when a client leaves the server
     socket.on('disconnect', () => {
-        console.log('user disconnected')
+        DEBUG('user disconnected')
     })
 })
 
-function refresh() {
-    updateDevices();
-    setTimeout(refresh, 5000);
+function refreshSwitchers_Cron() {
+    updateSwitcher();
+    setTimeout(refreshSwitchers_Cron, config.devices_refresh_interval);
 }
-refresh();
 
-server.listen(port, () => console.log(`Listening on port ${port}`))
+function refreshThermo_Cron() {
+    updateThermos();
+    setTimeout(refreshThermo_Cron, config.thermos_refresh_interval);
+}
+
+server.listen(port, () => DEBUG(`Listening on port ${port}`))
+
+refreshSwitchers_Cron();
+refreshThermo_Cron();

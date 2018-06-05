@@ -14,16 +14,24 @@ var devices = [
         switcher_path: '/3A.EEC507000000/PIO.B',
         sensor_path: '/3A.7DC607000000/sensed.B'
     },
-    // {
-    //     name: 'Рекуператор C°',
-    //     type: 'thermo',
-    //     path: '/28.FF6754610400/temperature',
-    // },
-    // {
-    //     name: 'Теплый пол C°',
-    //     type: 'thermo',
-    //     path: '/28.C3772D050000/temperature',
-    // }
+    {
+        name: 'Рекуператор C°',
+        type: 'thermo',
+        path: '/28.FF6754610400/temperature',
+        rules: [
+            {
+                '>25': '/3A.EEC507000000/PIO.A OFF'
+            },
+            {
+                '<10': '/3A.EEC507000000/PIO.A ON',
+            }
+        ]
+    },
+    {
+        name: 'Теплый пол C°',
+        type: 'thermo',
+        path: '/28.C3772D050000/temperature',
+    }
 ]
 
 
