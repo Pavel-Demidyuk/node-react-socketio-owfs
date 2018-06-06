@@ -62,7 +62,7 @@ class App extends Component {
                         width={850}
                         height={350}
                         interpolate={'cardinal'}
-                        yDomainRange={[0, 50]}
+                        yDomainRange={[15, 35]}
                         axisLabels={{x: 'My x Axis', y: 'My y Axis'}}
                         data={self.state.thermosGraphData[thermo.name]}
                     />
@@ -70,20 +70,6 @@ class App extends Component {
 
             thermosList.push(result)
         })
-        // for (var thermosName in this.state.thermos) {
-        //     var result =
-        //         <div key={thermos.name} className="element">
-        //             <li>{thermos.name} - {thermos.data}</li>
-        //             <LineChart
-        //                 xType={'text'}
-        //                 axes
-        //                 width={950}
-        //                 height={250}
-        //                 data={this.state.thermos[thermos.name]}
-        //             />
-        //         </div>
-        //     thermosList.push(result)
-        // }
         return (thermosList);
     }
 }
