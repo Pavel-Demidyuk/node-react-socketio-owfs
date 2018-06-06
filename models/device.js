@@ -1,5 +1,5 @@
 var Promise = require('bluebird');
-
+var appConfig = require('../configs/config');
 var devicesConfig = require('../configs/devices');
 
 switch (process.env.NODE_ENV) {
@@ -23,10 +23,6 @@ var checkFormat = function (device) {
         device = '/' + device;
     }
     return device;
-}
-
-function getRandomInt() {
-    return Math.floor(Math.random() * Math.floor(10000000));
 }
 
 var readFullPath = function (fullPath) {
@@ -87,7 +83,6 @@ var device = {
                         name: devicesConfig[i].name,
                         type: 'switcher',
                         sensor: Number(data[i][1]),
-                        random: getRandomInt()
                     })
                 }
                 else {
@@ -99,16 +94,6 @@ var device = {
                 }
             }
             callback(false, result)
-        })
-    },
-
-    switch: function (deviceName, state, callback) {
-        devicesConfig.forEach(function (deviceConfig) {
-            if (deviceConfig.name == deviceName) {
-                write(deviceConfig.switcher_path, state).then(function (err, data) {
-                    callback();
-                })
-            }
         })
     },
 
@@ -125,9 +110,37 @@ var device = {
         })
     },
 
+    turn: function (state, name, callback) {
+        DEBUG_OWFS('>>> TURN ' + state + ' of device ' + name)
+        var sensorState, switcherState;
+        devicesConfig.forEach(function(device){
+            if (device.name == name) {
+                Promise.all([
+                    readFullPath(device.switcher_path),
+                    readFullPath(device.sensor_path),
+                ]).then(function(data){
+                    [switcherState, sensorState] = data
+                    if (state == sensorState) {
+                        // do nothing, already switched
+                        DEBUG_WARNING(
+                            'Can\'t update '
+                            + name
+                            + ' to state ' + state + ' beacuse it\'s already in this state')
+                        callback(false);
+                    }
+                    else {
+                        write(device.switcher_path, 1 - switcherState, callback)
+                    }
+                })
+            }
+        })
+    },
+
     runRules: function (thermosData) {
-        // app [ { name: 'Рекуператор C°', type: 'thermo', data: 34.46 },
-        //     app   { name: 'Теплый пол C°', type: 'thermo', data: 8.66 } ] +1ms
+        if (!appConfig.automation) {
+            DEBUG_AUTOMATION('Automation is turned off in the configs');
+            return;
+        }
 
         var self = this;
         devicesConfig.forEach(function (device) {
@@ -152,7 +165,7 @@ var device = {
                                     case '>' : {
                                         if (thermoData.data > temperature) {
                                             DEBUG_AUTOMATION("AUTOMATION: ", fullPath, action);
-                                            self.write(fullPath, action == 'ON' ? 1 : 0, function(){
+                                            self.turn(fullPath, action == 'ON' ? 1 : 0, function () {
                                                 // self.runRules(thermosData);
                                             })
                                         }
@@ -161,7 +174,7 @@ var device = {
                                     case '<' : {
                                         if (thermoData.data < temperature) {
                                             DEBUG_AUTOMATION("AUTOMATION: ", fullPath, action);
-                                            self.write(fullPath, action == 'ON' ? 1 : 0, function(){
+                                            self.turn(fullPath, action == 'ON' ? 1 : 0, function () {
                                                 // self.runRules(thermosData);
                                             })
                                         }

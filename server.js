@@ -1,6 +1,7 @@
 DEBUG = require('debug')('app')
 DEBUG_OWFS = require('debug')('owfs')
 DEBUG_AUTOMATION = require('debug')('automation')
+DEBUG_WARNING = require('debug')('WARNING')
 
 const express = require('express')
 const http = require('http')
@@ -18,17 +19,32 @@ const app = express()
 const server = http.createServer(app)
 const io = socketIO(server)
 
+var updateInProgress = false;
+
 updateSwitcher = () => {
+    if (updateInProgress) {
+        DEBUG_WARNING('UPDATE ALREADY IN PROGRESS, SKIPPING')
+        return;
+    }
+
+    updateInProgress = true;
     device.getRaw('switcher', function (err, devices) {
+        updateInProgress = false;
         DEBUG_OWFS("DEVICES LIST TO SEND", devices)
         io.sockets.emit('switchers_update', devices);
-
+        var date = new Date()
     })
+
 }
 
 updateThermos = () => {
+    if (updateInProgress) {
+        DEBUG_WARNING('UPDATE ALREADY IN PROGRESS, SKIPPING')
+        return;
+    }
+
     device.getRaw('thermo', function (err, thermos) {
-        device.runRules(thermos, function(){
+        device.runRules(thermos, function () {
             // do nothing so far for async run
         })
         io.sockets.emit('thermos_update', thermos);
@@ -37,9 +53,8 @@ updateThermos = () => {
 
 io.on('connection', socket => {
     DEBUG('New client connected')
-    updateSwitcher();
     socket.on('switch', (name, state) => {
-        device.switch(name, state, function () {
+        device.turn(state, name, function () {
             updateSwitcher();
         })
     })

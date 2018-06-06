@@ -26,7 +26,7 @@ var Client = function (host, port) {
             '/PIO.B': '0',
             '/PIO.ALL': '0,0',
             '/sensed.ALL': '0,0',
-            '/sensed.A': '0',
+            '/sensed.A': '1',
             '/sensed.B': '0',
         },
         {
