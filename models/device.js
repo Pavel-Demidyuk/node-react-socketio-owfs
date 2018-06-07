@@ -165,7 +165,7 @@ var device = {
                                     case '>' : {
                                         if (thermoData.data > temperature) {
                                             DEBUG_AUTOMATION("AUTOMATION: ", fullPath, action);
-                                            self.turn(fullPath, action == 'ON' ? 1 : 0, function () {
+                                            self.turn(action == 'ON' ? 1 : 0, fullPath, function () {
                                                 // self.runRules(thermosData);
                                             })
                                         }
@@ -174,7 +174,7 @@ var device = {
                                     case '<' : {
                                         if (thermoData.data < temperature) {
                                             DEBUG_AUTOMATION("AUTOMATION: ", fullPath, action);
-                                            self.turn(fullPath, action == 'ON' ? 1 : 0, function () {
+                                            self.turn(action == 'ON' ? 1 : 0, fullPath, function () {
                                                 // self.runRules(thermosData);
                                             })
                                         }
