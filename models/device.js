@@ -111,7 +111,7 @@ var device = {
     },
 
     turn: function (state, name, callback) {
-        DEBUG_OWFS('>>> TURN ' + state + ' of device ' + name)
+        DEBUG_OWFS('>>> TURN ' + state + ' device ' + name)
         var sensorState, switcherState;
         devicesConfig.forEach(function(device){
             if (device.name == name) {
@@ -161,11 +161,12 @@ var device = {
 
                                 [fullPath, action] = rule[condition].split(' ')
 
+                                var action = action == 'ON' ? 1 : 0;
                                 switch (symbol) {
                                     case '>' : {
                                         if (thermoData.data > temperature) {
                                             DEBUG_AUTOMATION("AUTOMATION: ", fullPath, action);
-                                            self.turn(action == 'ON' ? 1 : 0, fullPath, function () {
+                                            self.turn(action, fullPath, function () {
                                                 // self.runRules(thermosData);
                                             })
                                         }
@@ -174,7 +175,7 @@ var device = {
                                     case '<' : {
                                         if (thermoData.data < temperature) {
                                             DEBUG_AUTOMATION("AUTOMATION: ", fullPath, action);
-                                            self.turn(action == 'ON' ? 1 : 0, fullPath, function () {
+                                            self.turn(action, fullPath, function () {
                                                 // self.runRules(thermosData);
                                             })
                                         }
