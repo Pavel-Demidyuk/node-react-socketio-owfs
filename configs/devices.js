@@ -20,10 +20,10 @@ var devices = [
         path: '/28.FF6754610400/temperature',
         rules: [
             {
-                '<100': '/3A.EEC507000000/PIO.A OFF'
+                '>27': '/3A.EEC507000000/PIO.A OFF'
             },
             {
-                '<100': '/3A.EEC507000000/PIO.B OFF',
+                '<25': '/3A.EEC507000000/PIO.B ON',
             }
         ]
     },
