@@ -23,7 +23,7 @@ var devices = [
                 '<100': '/3A.EEC507000000/PIO.A OFF'
             },
             {
-                '<100': '/3A.EEC507000000/PIO.A OFF',
+                '<100': '/3A.EEC507000000/PIO.B OFF',
             }
         ]
     },
