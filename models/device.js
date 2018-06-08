@@ -115,6 +115,7 @@ var device = {
         var sensorState, switcherState;
         devicesConfig.forEach(function(device){
             if (device.name == name) {
+                DEBUG_WARNING('DEVICE FOUND');
                 Promise.all([
                     readFullPath(device.switcher_path),
                     readFullPath(device.sensor_path),
