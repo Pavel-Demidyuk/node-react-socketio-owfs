@@ -110,12 +110,11 @@ var device = {
         })
     },
 
-    turn: function (state, name, callback) {
-        DEBUG_OWFS('>>> TURN ' + state + ' device ' + name)
+    turn: function (state, input, callback) {
+        DEBUG_OWFS('>>>*TURN ' + state + ' device ' + input)
         var sensorState, switcherState;
         devicesConfig.forEach(function(device){
-            if (device.name == name) {
-                DEBUG_WARNING('DEVICE FOUND');
+            if (device.name == input || device.switcher_path == input) {
                 Promise.all([
                     readFullPath(device.switcher_path),
                     readFullPath(device.sensor_path),
@@ -125,7 +124,7 @@ var device = {
                         // do nothing, already switched
                         DEBUG_WARNING(
                             'Can\'t update '
-                            + name
+                            + input
                             + ' to state ' + state + ' beacuse it\'s already in this state')
                         callback(false);
                     }
