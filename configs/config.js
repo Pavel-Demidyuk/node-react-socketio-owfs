@@ -5,5 +5,5 @@ module.exports = {
     server_host: 'raspberrypi.local',
     server_port : 4001,
     app_port : 3000,
-    automation: false // выключатель автоматизации
+    automation: true // выключатель автоматизации
 }
